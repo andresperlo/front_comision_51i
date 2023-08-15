@@ -6,7 +6,7 @@ import clienteAxios, { config } from '../utils/axiosClient'
 const EditPage = () => {
   const params = useParams()
   const navigate = useNavigate()
-  
+
   const [inputCheckName, setInputCheckName] = useState(false)
   const [recargarPage, setRecargarPage] = useState(false)
   const [formValues, setFormValues] = useState({
@@ -67,15 +67,15 @@ const EditPage = () => {
     <>
       <form>
         <div className="mb-3">
-          <label for="exampleInputEmail1" className="form-label">Nombre</label>
+          <label htmlFor="exampleInputEmail1" className="form-label">Nombre</label>
           <input type="text" name='name' value={formValues.name} className={inputCheckName ? 'form-control is-invalid' : 'form-control'} id="exampleInputEmail1" aria-describedby="emailHelp" onChange={handleChange} />
         </div>
         <div className="mb-3">
-          <label for="exampleInputPassword1" className="form-label">Precio</label>
+          <label htmlFor="exampleInputPassword1" className="form-label">Precio</label>
           <input type="number" name='price' value={formValues.price} className={inputCheckName ? 'form-control is-invalid' : 'form-control'} id="exampleInputPassword1" onChange={handleChange} />
         </div>
         <div className="mb-3">
-          <label for="exampleInputPassword1" className="form-label">Codigo</label>
+          <label htmlFor="exampleInputPassword1" className="form-label">Codigo</label>
           <input type="text" name='code' value={formValues.code} className={inputCheckName ? 'form-control is-invalid' : 'form-control'} id="exampleInputPassword1" onChange={handleChange} />
         </div>
 

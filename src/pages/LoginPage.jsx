@@ -58,15 +58,15 @@ const LoginPage = () => {
       <h2 className='py-3 text-center'>Iniciar sesion</h2>
       <div className='d-flex justify-content-center'>
         <form>
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Usuario</label>
-            <input type="text" name='user' class={userInput ? 'form-control is-invalid' : 'form-control'} id="exampleInputEmail1" aria-describedby="emailHelp" onChange={handleChange} />
+          <div className="mb-3">
+            <label htmlFor="exampleInputEmail1" className="form-label">Usuario</label>
+            <input type="text" name='user' className={userInput ? 'form-control is-invalid' : 'form-control'} id="exampleInputEmail1" aria-describedby="emailHelp" onChange={handleChange} />
           </div>
-          <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Contraseña</label>
-            <input type="password" name='pass' class={passInput ? 'form-control is-invalid' : 'form-control'} id="exampleInputPassword1" onChange={handleChange} />
+          <div className="mb-3">
+            <label htmlFor="exampleInputPassword1" className="form-label">Contraseña</label>
+            <input type="password" name='pass' className={passInput ? 'form-control is-invalid' : 'form-control'} id="exampleInputPassword1" onChange={handleChange} />
           </div>
-          <button type="submit" class="btn btn-primary my-3" onClick={handleClick}>Iniciar Sesion</button>
+          <button type="submit" className="btn btn-primary my-3" onClick={handleClick}>Iniciar Sesion</button>
         </form>
       </div>
     </>

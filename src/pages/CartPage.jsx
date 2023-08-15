@@ -54,7 +54,7 @@ const CartPage = () => {
 
   return (
     <>
-      <table class="table">
+      <table className="table">
         <thead>
           <tr>
             <th scope="col">ID Producto</th>

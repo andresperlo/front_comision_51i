@@ -76,23 +76,23 @@ const CreateUserPage = () => {
     <>
       <form>
         <div className="mb-3">
-          <label for="exampleInputEmail1" className="form-label">Nombre</label>
+          <label htmlFor="exampleInputEmail1" className="form-label">Nombre</label>
           <input type="text" name='name' value={formValues.name} className={inputCheckName ? 'form-control is-invalid' : 'form-control'} id="exampleInputEmail1" aria-describedby="emailHelp" onChange={handleChange} />
         </div>
         <div className="mb-3">
-          <label for="exampleInputEmail1" className="form-label">Usuario</label>
+          <label htmlFor="exampleInputEmail1" className="form-label">Usuario</label>
           <input type="text" name='userName' value={formValues.userName} className={inputCheckName ? 'form-control is-invalid' : 'form-control'} id="exampleInputEmail1" aria-describedby="emailHelp" onChange={handleChange} />
         </div>
         <div className="mb-3">
-          <label for="exampleInputPassword1" className="form-label">Contrseña</label>
+          <label htmlFor="exampleInputPassword1" className="form-label">Contrseña</label>
           <input type="number" name='pass' value={formValues.price} className={inputCheckName ? 'form-control is-invalid' : 'form-control'} id="exampleInputPassword1" onChange={handleChange} />
         </div>
         <div className="mb-3">
-          <label for="exampleInputPassword1" className="form-label">Repetir Contrseña</label>
+          <label htmlFor="exampleInputPassword1" className="form-label">Repetir Contrseña</label>
           <input type="number" name='rpass' value={formValues.price} className={inputCheckName ? 'form-control is-invalid' : 'form-control'} id="exampleInputPassword1" onChange={handleChange} />
         </div>
         <div className="mb-3">
-          <label for="exampleInputPassword1" className="form-label">Role</label>
+          <label htmlFor="exampleInputPassword1" className="form-label">Role</label>
           <input type="text" name='role' value={formValues.code} className={inputCheckName ? 'form-control is-invalid' : 'form-control'} id="exampleInputPassword1" onChange={handleChange} />
         </div>
 
