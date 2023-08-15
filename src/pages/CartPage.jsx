@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import clienteAxios, { config } from '../utils/axiosClient'
 
 const CartPage = () => {
   const [cart, setCart] = useState([])
@@ -6,36 +7,18 @@ const CartPage = () => {
   let suma = 0
 
   const getCartUser = async () => {
-    const token = JSON.parse(localStorage.getItem('token'))
 
     const idUser = JSON.parse(localStorage.getItem('idUser'))
-    const resCart = await fetch(`http://localhost:8080/api/users/${idUser}`, {
-      method: 'GET',
-      headers: {
-        "content-type": "application/json",
-        'authorization': `Bearer ${token}`
-      }
-    })
-    const dataCart = await resCart.json()
-
-    const idCart = dataCart.getUser.idCart
-    const resProd = await fetch(`http://localhost:8080/api/cart/${idCart}`, {
-      method: 'GET',
-      headers: {
-        "content-type": "application/json",
-        'authorization': `Bearer ${token}`
-      }
-    })
-    const dataProd = await resProd.json()
-
+    const resCart = await clienteAxios.get(`/users/${idUser}`, config)
+    const resProd = await clienteAxios.get(`/cart/${resCart.data.getUser.idCart}`, config)
     const valoresIniciales = {}
 
-    dataProd.getCart.products.forEach(producto => {
+    resProd.data.getCart.products.forEach(producto => {
       valoresIniciales[producto._id] = 0
       setCantidadState(valoresIniciales)
     });
 
-    setCart(dataProd.getCart.products)
+    setCart(resProd.data.getCart.products)
   }
 
   const handleChange = (ev, idProd) => {
@@ -57,18 +40,8 @@ const CartPage = () => {
   }
 
   const handleClickMP = async () => {
-    const token = JSON.parse(localStorage.getItem('token'))
-  
-    const res = await fetch('http://localhost:8080/api/pay', {
-      method: 'POST',
-      headers: {
-        "content-type": "application/json",
-        'authorization': `Bearer ${token}`
-      },
-    })
-
-    const data = await res.json()
-    location.href = `${data.res.init_point}`
+    const res = await clienteAxios.post('/pay', {}, config)
+    location.href=`${res.data.res.init_point}`
   }
 
   useEffect(() => {

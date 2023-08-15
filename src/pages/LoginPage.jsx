@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, {  useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import clienteAxios, { config } from '../utils/axiosClient'
 
 const LoginPage = () => {
   const navigate = useNavigate()
@@ -28,28 +29,20 @@ const LoginPage = () => {
         setUserInput(false)
         setPassInput(false)
 
-        const res = await fetch('http://localhost:8080/api/users/login', {
-          method: 'POST',
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            usuario: formInputs.user,
-            contrasenia: formInputs.pass
-          })
-        })
-
-        const data = await res.json()
-        console.log(data.userUpdate.role)
-        if (data.userUpdate.role === 'admin') {
-          localStorage.setItem('token', JSON.stringify(data.userUpdate.token))
-          localStorage.setItem('role', JSON.stringify(data.userUpdate.role))
-          localStorage.setItem('idUser', JSON.stringify(data.userUpdate._id))
+        const res = await clienteAxios.post('/users/login', {
+          usuario: formInputs.user,
+          contrasenia: formInputs.pass
+        }, config)
+    
+        if (res.data.userUpdate.role === 'admin') {
+          localStorage.setItem('token', JSON.stringify(res.data.userUpdate.token))
+          localStorage.setItem('role', JSON.stringify(res.data.userUpdate.role))
+          localStorage.setItem('idUser', JSON.stringify(res.data.userUpdate._id))
           navigate('/admin')
-        } else if (data.userUpdate.role === 'user') {
-          localStorage.setItem('token', JSON.stringify(data.userUpdate.token))
-          localStorage.setItem('role', JSON.stringify(data.userUpdate.role))
-          localStorage.setItem('idUser', JSON.stringify(data.userUpdate._id))
+        } else if (res.data.userUpdate.role === 'user') {
+          localStorage.setItem('token', JSON.stringify(res.data.userUpdate.token))
+          localStorage.setItem('role', JSON.stringify(res.data.userUpdate.role))
+          localStorage.setItem('idUser', JSON.stringify(res.data.userUpdate._id))
           navigate('/user')
         }
 
@@ -59,11 +52,6 @@ const LoginPage = () => {
       setPassInput(true)
     }
   }
-
-  useEffect(() => {
-    console.log(formInputs)
-  }, [formInputs])
-
 
   return (
     <>

@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import clienteAxios, { config } from '../utils/axiosClient'
 
 const EditPage = () => {
   const params = useParams()
+  const navigate = useNavigate()
+  
   const [inputCheckName, setInputCheckName] = useState(false)
   const [recargarPage, setRecargarPage] = useState(false)
   const [formValues, setFormValues] = useState({
@@ -13,13 +16,12 @@ const EditPage = () => {
   })
 
   const getProduct = async () => {
-    const res = await fetch(`http://localhost:8080/api/products/${params.id}`)
-    const { getOneProd } = await res.json()
+    const res = await clienteAxios.get(`/products/${params.id}`)
     setFormValues({
-      name: getOneProd.nombre,
-      price: getOneProd.precio,
-      code: getOneProd.codigo
-    })
+      name: res.data.getOneProd.nombre,
+      price: res.data.getOneProd.precio,
+      code: res.data.getOneProd.codigo
+    }) 
   }
 
   const handleChange = (ev) => {
@@ -31,8 +33,7 @@ const EditPage = () => {
 
   const handleClick = async (ev) => {
     ev.preventDefault()
-    const token = JSON.parse(localStorage.getItem('token'))
-    
+
     if (formValues.name === '' && formValues.price === '' && formValues.code === '') {
       Swal.fire({
         icon: 'error',
@@ -42,20 +43,16 @@ const EditPage = () => {
     } else if (formValues.name === '') {
       setInputCheckName(true)
     } else {
-      const res = await fetch(`http://localhost:8080/api/products/${params.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          nombre: formValues.name,
-          precio: formValues.price,
-          codigo: formValues.code
-        })
-      })
-      const resUpdateProd = await res.json()
-      console.log(resUpdateProd)
+
+      const res = await clienteAxios.put(`/products/${params.id}`, {
+        nombre: formValues.name,
+        precio: formValues.price,
+        codigo: formValues.code
+      }, config)
+
+      if(res.status === 200){
+        navigate('/admin')
+      }
       setRecargarPage(true)
     }
   }

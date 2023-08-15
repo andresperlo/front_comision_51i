@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import clienteAxios, { config } from '../utils/axiosClient'
 
 const Form = () => {
   const [formInputs, setFormInputs] = useState({
-    name:'',
+    name: '',
     user: '',
     pass: '',
     repeatPass: ''
@@ -14,39 +15,32 @@ const Form = () => {
 
   const handleChange = (ev) => {
     const { name, value } = ev.target
-    setFormInputs({...formInputs, [name]: value })
+    setFormInputs({ ...formInputs, [name]: value })
   }
 
-  useEffect(() => {
-    console.log(formInputs)
-  }, [formInputs])
-
-  const handleSubmit = async() => {
-    if(formInputs.pass === formInputs.repeatPass){
-      const res = await fetch('http://localhost:8080/api/users', {
-        method:'POST',
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+  const handleSubmit = async () => {
+    try {
+      if (formInputs.pass === formInputs.repeatPass) {
+        const res = await clienteAxios.post('/users', {
           nombre: formInputs.name,
           usuario: formInputs.user,
           contrasenia: formInputs.pass
-        })
-      })
-      
-      const data = await res.json()
-      if(data.status === 201){
-        Swal.fire(
-          'Registro exitoso!',
-          'Inicia sesion para ver tu home!',
-          'success'
-        )
+        }, config)
 
-        setTimeout(() => {
-          navigate('/login')
-        }, 2000);
+        if (res.status === 201) {
+          Swal.fire(
+            'Registro exitoso!',
+            'Inicia sesion para ver tu home!',
+            'success'
+          )
+
+          setTimeout(() => {
+            navigate('/login')
+          }, 2000);
+        }
       }
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -55,7 +49,7 @@ const Form = () => {
     <>
       <div className='d-flex justify-content-center'>
         <form className='w-50'>
-        <div className="mb-3">
+          <div className="mb-3">
             <label htmlFor="exampleInputEmail3" className="form-label">Nombre y Apellido</label>
             <input type="text" name='name' className="form-control" id="exampleInputEmail3" aria-describedby="emailHelp" onChange={handleChange} />
           </div>

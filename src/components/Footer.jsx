@@ -9,7 +9,6 @@ const Footer = () => {
   }
 
   useEffect(() => {
-    console.log(role)
     getRole()
   },[role])
 

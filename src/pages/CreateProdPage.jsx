@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import React, {  useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import clienteAxios, { config } from '../utils/axiosClient'
 
 const CreateProdPage = () => {
   const navigate = useNavigate()
@@ -30,25 +31,18 @@ const CreateProdPage = () => {
     } else if (formValues.name === '') {
       setInputCheckName(true)
     } else {
-      const res = await fetch(`http://localhost:8080/api/products`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          nombre: formValues.name,
-          precio: formValues.price,
-          codigo: formValues.code
-        })
-      })
-      const resCreateProd = await res.json()
+      const res = await clienteAxios.post('products', {
+        nombre: formValues.name,
+        precio: formValues.price,
+        codigo: formValues.code
+      }, config)
+     
 
-      if (resCreateProd.status === 201) {
+      if (res.status === 201) {
         
-
         Swal.fire(
           'Producto creado correctamente!',
+          '',
           'success'
         )
 

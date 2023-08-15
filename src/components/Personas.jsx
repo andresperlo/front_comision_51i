@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { arrayPersona } from '../data/arrayPersonas'
 
 const Personas = () => {
 const [data, setData] = useState([])
@@ -10,12 +9,6 @@ useEffect(() => {
   .then((res) => res.json())
   .then((result) => setData(result.results))
 }, [])
-
-
-useEffect(() => {
-  console.log('data2')
-  console.log(data)
-}, [data])
 
 const addData = () => {
   const newPersona = {

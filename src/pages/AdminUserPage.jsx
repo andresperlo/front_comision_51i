@@ -1,28 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import clienteAxios, { config } from '../utils/axiosClient'
 
 const AdminUserPage = () => {
   const [users, setUsers] = useState([])
   const [refreshUsers, setRefreshUsers] = useState(false);
 
   const getAllUsers = async () => {
-    const token = JSON.parse(localStorage.getItem('token'))
-
-    const res = await fetch('http://localhost:8080/api/users', {
-      method:'GET',
-      headers:{
-        'content-type':'application/json',
-        'authorization': `Bearer ${token}` 
-      }
-    })
-    const { allUsers } = await res.json()
-    setUsers(allUsers)
+    const res = await clienteAxios.get('users', config)
+    setUsers(res.data.allUsers)
   }
 
   const deleteUser = async (id) => {
     const token = JSON.parse(localStorage.getItem('token'))
-    
+
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: 'btn btn-success',
@@ -41,15 +33,7 @@ const AdminUserPage = () => {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-
-        fetch(`http://localhost:8080/api/users/${id}`, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            'authorization': `Bearer ${token}` 
-          },
-        })
-          .then(res => res.json())
+        clienteAxios.delete(`/users/${id}`, config)
           .then(res => {
             if (res.status === 200) {
               swalWithBootstrapButtons.fire(
@@ -59,7 +43,7 @@ const AdminUserPage = () => {
               )
             }
           })
-          setRefreshUsers(true)
+        setRefreshUsers(true)
       } else if (
         /* Read more about handling dismissals below */
         result.dismiss === Swal.DismissReason.cancel
@@ -81,7 +65,7 @@ const AdminUserPage = () => {
 
   return (
     <>
-     <Link to={'/createUser'} className='btn btn-primary'>Crear Nuevo Usuario</Link>
+      <Link to={'/createUser'} className='btn btn-primary'>Crear Nuevo Usuario</Link>
       <table className="table">
         <thead>
           <tr>
@@ -95,7 +79,7 @@ const AdminUserPage = () => {
         <tbody>
           {
             users.map((usuario) =>
-              <tr>
+              <tr key={usuario._id}>
                 <th scope="row">{usuario._id}</th>
                 <td>{usuario.nombre}</td>
                 <td>{usuario.usuario}</td>

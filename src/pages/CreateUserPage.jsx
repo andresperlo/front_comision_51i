@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import clienteAxios, { config } from '../utils/axiosClient'
 
 const CreateUserPage = () => {
   const navigate = useNavigate()
@@ -39,26 +40,20 @@ const CreateUserPage = () => {
         })
         return
       }
+      const res = await clienteAxios.post('/users', {
+        nombre: formValues.name,
+        usuario: formValues.userName,
+        contrasenia: formValues.pass,
+        role: formValues.role
+      }, config)
+     
 
-      const res = await fetch(`http://localhost:8080/api/users`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          nombre: formValues.name,
-          usuario: formValues.userName,
-          contrasenia: formValues.pass,
-          role: formValues.role
-        })
-      })
-      const resCreateProd = await res.json()
-
-      if (resCreateProd.status === 201) {
+      if (res.status === 201) {
         
 
         Swal.fire(
           'Usuario creado correctamente!',
+          '',
           'success'
         )
 

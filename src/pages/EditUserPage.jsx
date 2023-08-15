@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import clienteAxios, { config } from '../utils/axiosClient'
 
 const EditUserPage = () => {
   const params = useParams()
@@ -12,22 +13,14 @@ const EditUserPage = () => {
     role: ''
   })
 
-  const getProduct = async () => {
-    const token = JSON.parse(localStorage.getItem('token'))
+  const getUser = async () => {
 
-    const res = await fetch(`http://localhost:8080/api/users/${params.id}`, {
-      method: 'GET',
-      headers: {
-        'content-type': 'application/json',
-        'authorization': `Bearer ${token}`
-      }
-    })
-
-    const { getUser } = await res.json()
+    const res = await clienteAxios.get(`/users/${params.id}`, config)
+    
     setFormValues({
-      name: getUser.nombre,
-      userName: getUser.usuario,
-      role: getUser.role
+      name: res.data.getUser.nombre,
+      userName: res.data.getUser.usuario,
+      role: res.data.getUser.role
     })
   }
 
@@ -40,8 +33,7 @@ const EditUserPage = () => {
 
   const handleClick = async (ev) => {
     ev.preventDefault()
-    const token = JSON.parse(localStorage.getItem('token'))
-    
+   
     if (formValues.name === '' && formValues.userName === '' && formValues.role === '') {
       Swal.fire({
         icon: 'error',
@@ -51,22 +43,16 @@ const EditUserPage = () => {
     } else if (formValues.name === '') {
       setInputCheckName(true)
     } else {
-      const res = await fetch(`http://localhost:8080/api/users/${params.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          nombre: formValues.name,
+      const res = await clienteAxios.put(`/users/${params.id}`, {
+        nombre: formValues.name,
           usuario: formValues.userName,
           role: formValues.role
-        })
-      })
-      const resUpdateUser = await res.json()
-      if (resUpdateUser.status === 200) {
+      }, config)
+      
+      if (res.status === 200) {
         Swal.fire(
           'Usuario editado correctamente!',
+          '',
           'success'
         )
       }
@@ -83,7 +69,7 @@ const EditUserPage = () => {
   }
 
   useEffect(() => {
-    getProduct()
+    getUser()
   }, [])
 
 
